@@ -8,7 +8,7 @@ WSSE Student Enrollment System is a full-stack server application developed as a
 
 ## Features
 
-* **OpenAPI Specification**: Complete API documentation using OpenAPI 3.1 for student enrollment operations.
+* **OpenAPI Specification**: Complete API documentation using OpenAPI 3.0 for student enrollment operations.
 * **Security Implementation**: JWT-based authentication and role-based authorization for secure access.
 * **Student Management**: CRUD operations for student records, including enrollment and course registration.
 * **Authorization Levels**: Different access levels for students, instructors, and administrators.
