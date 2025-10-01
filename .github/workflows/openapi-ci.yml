@@ -1,0 +1,32 @@
+name: OpenAPI CI Minimal CI
+
+on:
+  pull_request:
+    paths:
+      - 'openapi/**'
+      - '.github/workflows/openapi-ci.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'openapi/**'
+      - '.github/workflows/openapi-ci.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install -g @redocly/openapi-cli
+
+      - name: Validate OpenAPI specification with swagger-cli
+        run: npm i -g @apidevtools/swagger-cli && swagger-cli validate openapi/openapi.yaml
