@@ -5,6 +5,48 @@ info:
 servers:
   - url: "https://api.example.edu/api/v1"
 
+tags:
+  - name: health
+    description: Health-related operations
+
+externalDocs:
+  description: "Health Check Documentation"
+  url: "https://example.edu/wsse/handbook"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          minLength: 1
+      required:
+        - id
+        - name
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "ERR_NOT_FOUND"
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+security:
+  - ApiKeyAuth: []
+
 paths:
   /health:
     get:
@@ -22,3 +64,59 @@ paths:
                   status:
                     type: string
                     example: "ok"
+
+  /students:
+    get:
+      summary: "List Students"
+      tags: [health]
+      description: "Retrieve a list of all students"
+      responses:
+        '200':
+          description: "A list of students"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Student'
+        '500':
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: "Create Student"
+      requestBody:
+        description: "Student object that needs to be added"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+            examples:
+              ok:
+                value:
+                  id: 101
+                  name: "Bernie"
+      responses:
+        '201':
+          description: "Student created successfully"
+          headers:
+            Location:
+              description: "URL of the created student"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '400':
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
