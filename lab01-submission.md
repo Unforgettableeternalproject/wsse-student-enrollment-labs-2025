@@ -51,38 +51,64 @@ paths:
 ```yaml
   /students:
     get:
-      summary: "Get all students"
+      summary: "List Students"
+      tags: [health]
       description: "Retrieve a list of all students"
       responses:
         '200':
-          description: "List of students"
+          description: "A list of students"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Student'
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Student'
+        '500':
+          description: "Server error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 ```
 
 ### POST /students Endpoint
 
 ```yaml
     post:
-      summary: "Create a new student"
-      description: "Add a new student to the system"
+      summary: "Create Student"
       requestBody:
+        description: "Student object that needs to be added"
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Student'
+            examples:
+              ok:
+                value:
+                  id: 101
+                  name: "Bernie"
       responses:
         '201':
           description: "Student created successfully"
+          headers:
+            Location:
+              description: "URL of the created student"
+              schema:
+                type: string
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
+        '400':
+          description: "Invalid input"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 ```
 
 ### Schemas
@@ -97,34 +123,27 @@ components:
       properties:
         id:
           type: integer
-          example: 1
+          format: int64
         name:
           type: string
-          example: "John Doe"
-        email:
-          type: string
-          example: "john.doe@example.com"
+          minLength: 1
       required:
+        - id
         - name
-        - email
 ```
 
-#### Course Schema
+#### Error Schema
 
 ```yaml
-    Course:
+    Error:
       type: object
       properties:
-        id:
-          type: integer
-          example: 101
-        title:
+        code:
           type: string
-          example: "Introduction to Computer Science"
-        credits:
-          type: integer
-          example: 3
+          example: "ERR_NOT_FOUND"
+        message:
+          type: string
       required:
-        - title
-        - credits
+        - code
+        - message
 ```
