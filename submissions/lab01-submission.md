@@ -12,15 +12,15 @@
 
 ### Swagger Editor Screenshot
 
-![Swagger Editor](resources/labs/01-editor.png)
+![Swagger Editor](images/lab01/01-editor.png)
 
 ### PR Green Light Screenshot
 
-![PR Green Light](resources/labs/02-pr-green.png)
+![PR Green Light](images/lab01/02-pr-green.png)
 
 ### CI Content Screenshot
 
-![CI Content](resources/labs/03-actions-log.png)
+![CI Content](images/lab01/03-actions-log.png)
 
 ## Key Snippets from openapi.yaml
 
