@@ -15,19 +15,24 @@ externalDocs:
 
 components:
   securitySchemes:
-    CognitoOAuth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: "https://ap-southeast-2mr6mvb05j.auth.ap-southeast-2.amazoncognito.com"
-          tokenUrl: "https://ap-southeast-2mr6mvb05j.auth.ap-southeast-2.amazoncognito.com/oauth2/token"
-          scopes:
-            students.read: "Read access to student information"
-            students.write: "Write access to student information"
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-KEY
+      CognitoOAuth2:
+        type: apiKey
+        name: Authorization
+        in: header
+        x-amazon-apigateway-authtype: cognito_user_pools
+        x-amazon-apigateway-authorizer:
+          type: cognito_user_pools
+          providerARNs:
+            - arn:aws:cognito-idp:ap-southeast-2:434824683139:userpool/ap-southeast-2_MR6MVb05j
+    # CognitoOAuth2:
+    #   type: oauth2
+    #   flows:
+    #     authorizationCode:
+    #       authorizationUrl: "https://ap-southeast-2mr6mvb05j.auth.ap-southeast-2.amazoncognito.com/oauth2/authorize"
+    #       tokenUrl: "https://ap-southeast-2mr6mvb05j.auth.ap-southeast-2.amazoncognito.com/oauth2/token"
+    #       scopes:
+    #         students.read: "Read access to student information"
+    #         students.write: "Write access to student information"
   schemas:
     Student:
       type: object
@@ -55,14 +60,15 @@ components:
 
 security:
   - ApiKeyAuth: []
-  - CognitoOAuth2: [students.read]
+  - CognitoOAuth2: [https://api.example.edu/students.read, https://api.example.edu/students.write]
 
 paths:
   /health:
     get:
       summary: "Health Check"
       description: "Check the health status of the API"
-      security: []  # No authentication required (currently)
+      security:
+        - CognitoOAuth2: []
       responses:
         '200':
           description: "API is healthy (OK)"
@@ -80,6 +86,8 @@ paths:
       summary: "List Students"
       tags: [health]
       description: "Retrieve a list of all students (Requires students.read scope)"
+      security:
+        - CognitoOAuth2: [https://api.example.edu/students.read]
       responses:
         '200':
           description: "A list of students"
@@ -113,7 +121,7 @@ paths:
                   id: 101
                   name: "Bernie"
       security:
-        - CognitoOAuth2: [students.write]
+        - CognitoOAuth2: [https://api.example.edu/students.write]
       responses:
         '201':
           description: "Student created successfully"
