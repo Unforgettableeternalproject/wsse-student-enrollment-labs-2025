@@ -1,1 +1,4 @@
 README_example.md
+
+# Lambda function code and dependencies (local development only)
+lambda/

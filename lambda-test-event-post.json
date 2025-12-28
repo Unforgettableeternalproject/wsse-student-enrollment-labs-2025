@@ -1,0 +1,20 @@
+{
+  "resource": "/students",
+  "path": "/students",
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "multiValueHeaders": {},
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourcePath": "/students",
+    "httpMethod": "POST",
+    "path": "/prod/students"
+  },
+  "body": "{\"name\":\"Test Student\"}",
+  "isBase64Encoded": false
+}
