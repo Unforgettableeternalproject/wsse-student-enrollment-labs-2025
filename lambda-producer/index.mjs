@@ -2,9 +2,9 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 
-const ddbClient = new DynamoDBClient({ region: "ap-southeast-2" });
+const ddbClient = new DynamoDBClient({ region: "ap-northeast-1" });
 const docClient = DynamoDBDocumentClient.from(ddbClient);
-const snsClient = new SNSClient({ region: "ap-southeast-2" });
+const snsClient = new SNSClient({ region: "ap-northeast-1" });
 
 const TABLE_NAME = process.env.TABLE_NAME || "Students";
 const SNS_TOPIC_ARN = process.env.SNS_TOPIC_ARN;
