@@ -1,8 +1,17 @@
 README_example.md
 
-# Lambda function code and dependencies (local development only)
-lambda/
-lambda-consumer/
-lambda-producer/
+# CDK
+node_modules/
+cdk.out/
+*.js
+*.d.ts
+!bin/*.js
+!lib/*.js
+
+# Lambda deployment packages
 *.zip
 *.gz
+
+# Keep Lambda source code
+!lambda-producer/
+!lambda-consumer/

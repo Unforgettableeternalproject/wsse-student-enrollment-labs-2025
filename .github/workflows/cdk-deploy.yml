@@ -1,0 +1,69 @@
+name: Deploy CDK Stack
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/**'
+      - 'bin/**'
+      - 'lambda-producer/**'
+      - 'lambda-consumer/**'
+      - '.github/workflows/cdk-deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::434824683139:role/GitHubActionsRole
+          aws-region: ap-southeast-2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install CDK dependencies
+        run: npm ci
+
+      - name: Install Lambda Producer dependencies
+        run: |
+          cd lambda-producer
+          npm ci
+          cd ..
+
+      - name: Install Lambda Consumer dependencies
+        run: |
+          cd lambda-consumer
+          npm ci
+          cd ..
+
+      - name: Build CDK project
+        run: npm run build
+
+      - name: CDK Synth
+        run: npm run synth
+
+      - name: CDK Deploy
+        run: npm run deploy -- --require-approval never
+
+      - name: Output Stack Info
+        run: |
+          echo "✅ Stack deployed successfully!"
+          aws cloudformation describe-stacks \
+            --stack-name WsseStack \
+            --region ap-southeast-2 \
+            --query 'Stacks[0].Outputs' \
+            --output table
