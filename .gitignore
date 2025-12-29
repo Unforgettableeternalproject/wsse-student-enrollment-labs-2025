@@ -2,3 +2,7 @@ README_example.md
 
 # Lambda function code and dependencies (local development only)
 lambda/
+lambda-consumer/
+lambda-producer/
+*.zip
+*.gz
