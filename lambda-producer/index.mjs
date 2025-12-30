@@ -8,9 +8,18 @@ const snsClient = new SNSClient({ region: "ap-northeast-1" });
 
 const TABLE_NAME = process.env.TABLE_NAME || "Students";
 const SNS_TOPIC_ARN = process.env.SNS_TOPIC_ARN;
+// Lab 09: 讀取環境變數
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_NAME;
 
 export const handler = async (event) => {
   console.log("Event:", JSON.stringify(event, null, 2));
+  
+  // Lab 09: 顯示成功讀取密碼（僅顯示長度，不顯示實際密碼）
+  console.log("成功讀取密碼，長度:", DB_PASSWORD?.length || 0);
+  console.log("資料庫主機:", DB_HOST);
+  console.log("資料庫名稱:", DB_NAME);
 
   const path = event.path || event.resource;
   const method = event.httpMethod;
@@ -30,6 +39,26 @@ export const handler = async (event) => {
         statusCode: 200,
         headers,
         body: JSON.stringify({ status: "ok" })
+      };
+    }
+
+    // Lab 09: 測試連線端點
+    if (path === "/test-connection" && method === "GET") {
+      console.log("測試連線端點被呼叫");
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          message: "連線成功...",
+          config: {
+            host: DB_HOST,
+            database: DB_NAME,
+            passwordLength: DB_PASSWORD?.length || 0,
+            tableConfigured: !!TABLE_NAME,
+            snsConfigured: !!SNS_TOPIC_ARN
+          },
+          timestamp: new Date().toISOString()
+        })
       };
     }
 

@@ -28,6 +28,7 @@ WSSE 學生註冊系統是一個為網際服務軟體工程課程開發的全端
 - Lab 06: CDK 基礎設施 (`images/lab06/`)
 - Lab 07: CloudWatch 可觀測性 (`images/lab07/`)
 - Lab 08: CloudFront 前端託管 (`images/lab08/`)
+- Lab 09: 企業級資安 (`images/lab09/`)
 
 ## 架構
 
@@ -109,6 +110,7 @@ DELETE /students/{id}      - 刪除學生
 - **Lab 6** ✅：AWS CDK - 基礎設施即程式碼自動化部署
 - **Lab 7** ✅：可觀測性 - CloudWatch Logs、Metrics、Alarms、Dashboard 及 X-Ray 追蹤
 - **Lab 8** ✅：前端託管 - CloudFront CDN + S3 靜態網站託管
+- **Lab 9** ✅：企業級資安 - 加密驗證（DynamoDB/S3）、Lambda 環境變數機密管理、執行測試
 ### 身份驗證
 
 身份驗證透過 AWS Cognito 處理：
@@ -142,11 +144,12 @@ wsse-student-enrollment-labs-2025/
 │   ├── lab02-submission.md
 │   ├── lab06-submission.md
 │   ├── lab07-submission.md
-│   └── lab08-submission.md
+│   ├── lab08-submission.md
+│   └── lab09-submission.md
 └── images/                          # Lab 截圖
     ├── lab01/, lab02/, lab03/
     ├── lab06/, lab07/, lab08/
-    └── ...
+    └── lab09/
 ```
 
 ## 監控與可觀測性
@@ -175,14 +178,17 @@ wsse-student-enrollment-labs-2025/
 
 ## Lab 進度
 
-這個專案將隨著課程進展而演變，每堂課都會添加新功能：
+本專案隨課程進展完成了以下實驗：
 
-- **Lab 1**：基本 OpenAPI 規格
-- **Lab 2**：待探索
-- **Lab 3**：待探索
-- **Lab 4**：待探索
-- **Lab 5**：待探索
-- **Lab 6**：待探索
+- **Lab 1** ✅：OpenAPI 規格 - 使用 OpenAPI 3.0 定義 RESTful API 規格及 Swagger 驗證
+- **Lab 2** ✅：AWS Cognito - OAuth2 身份驗證與使用者池整合
+- **Lab 3** ✅：Lambda 函數 - 無伺服器 API 端點實作
+- **Lab 4** ✅：DynamoDB - NoSQL 資料庫整合學生資料持久化
+- **Lab 5** ✅：SNS/SQS - 事件驅動架構實作非同步訊息處理
+- **Lab 6** ✅：AWS CDK - 基礎設施即程式碼自動化部署
+- **Lab 7** ✅：可觀測性 - CloudWatch Logs、Metrics、Alarms、Dashboard 及 X-Ray 追蹤
+- **Lab 8** ✅：前端託管 - CloudFront CDN + S3 靜態網站託管
+- **Lab 9** ✅：企業級資安 - 加密驗證（DynamoDB/S3）、Lambda 環境變數機密管理、執行測試
 
 ## 待辦事項
 

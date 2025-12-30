@@ -54,6 +54,10 @@ export class WsseStack extends cdk.Stack {
       environment: {
         TABLE_NAME: studentsTable.tableName,
         SNS_TOPIC_ARN: studentTopic.topicArn,
+        // Lab 09: 機密管理 - 環境變數
+        DB_PASSWORD: 'demo-password-12345',
+        DB_HOST: 'localhost',
+        DB_NAME: 'students_db',
       },
       timeout: cdk.Duration.seconds(30),
       memorySize: 256,
@@ -108,6 +112,14 @@ export class WsseStack extends cdk.Stack {
 
     const studentById = students.addResource('{id}');
     studentById.addMethod('GET', studentIntegration);
+
+    // Lab 09: 測試連線端點
+    const testConnection = api.root.addResource('test-connection');
+    testConnection.addMethod('GET', studentIntegration);
+
+    // Health check端點
+    const health = api.root.addResource('health');
+    health.addMethod('GET', studentIntegration);
 
     // ==================== Lab 07: CloudWatch Metrics & Alarms ====================
     
