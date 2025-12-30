@@ -1,0 +1,7 @@
+﻿{
+    "Name": "wsse-lab08-oac",
+    "Description": "OAC for Lab 08 S3 bucket",
+    "SigningProtocol": "sigv4",
+    "SigningBehavior": "always",
+    "OriginAccessControlOriginType": "s3"
+}

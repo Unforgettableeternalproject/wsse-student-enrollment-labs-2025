@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WSSE 學生註冊系統 - 前端入口</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .student-id {
+            text-align: center;
+            color: #764ba2;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        
+        .info-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .info-value {
+            color: #764ba2;
+            font-family: monospace;
+        }
+        
+        .image-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .fetch-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .fetch-section h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        #fetchResult {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .feature-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 WSSE 學生註冊系統</h1>
+        <div class="student-id">學號：411177013</div>
+        
+        <div class="info-section">
+            <h2>📊 系統資訊</h2>
+            <div class="info-item">
+                <span class="info-label">部署時間：</span>
+                <span class="info-value" id="deployTime"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">當前 URL：</span>
+                <span class="info-value" id="currentUrl"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">協議：</span>
+                <span class="info-value" id="protocol"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">User Agent：</span>
+                <span class="info-value" id="userAgent"></span>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">�</div>
+                <div class="feature-title">學生管理</div>
+                <div class="feature-desc">註冊與資料維護</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">安全認證</div>
+                <div class="feature-desc">OAuth2 身份驗證</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">即時監控</div>
+                <div class="feature-desc">系統健康狀態</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">無伺服器架構</div>
+                <div class="feature-desc">高可用性部署</div>
+            </div>
+        </div>
+        
+        <div class="image-section">
+            <h2>📸 系統架構展示</h2>
+            <img id="remoteImage" src="image.jpg" alt="WSSE 學生註冊系統架構" />
+            <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                採用 AWS 無伺服器架構 • CloudFront CDN • Lambda API • DynamoDB 資料庫
+            </p>
+        </div>
+        
+        <div class="fetch-section">
+            <h3>🔍 系統狀態檢測</h3>
+            <p>驗證 CDN 連線與資源載入狀態</p>
+            <div id="fetchResult">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        // 更新系統資訊
+        document.getElementById('deployTime').textContent = new Date().toLocaleString('zh-TW');
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('protocol').textContent = window.location.protocol;
+        document.getElementById('userAgent').textContent = navigator.userAgent.substring(0, 60) + '...';
+        
+        // CORS Fetch 測試
+        async function testFetch() {
+            const resultDiv = document.getElementById('fetchResult');
+            
+            try {
+                // 注意：部署後需要將此 URL 修改為你的 CloudFront domain
+                // 例如：https://d1234567890.cloudfront.net/image.jpg
+                const imageUrl = 'https://dpw6s93caiwi1.cloudfront.net/image.jpg';
+                
+                resultDiv.innerHTML = `<div class="status">正在檢測系統狀態...</div>`;
+                
+                const response = await fetch(imageUrl, {
+                    method: 'HEAD',
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const headers = {};
+                    response.headers.forEach((value, key) => {
+                        headers[key] = value;
+                    });
+                    
+                    resultDiv.innerHTML = `
+                        <div class="status success">✅ 系統運作正常</div>
+                        <p><strong>狀態碼:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>內容類型:</strong> ${headers['content-type'] || 'N/A'}</p>
+                        <p><strong>CDN 快取:</strong> ${headers['x-cache'] || headers['cloudfront-cache-status'] || '已啟用'}</p>
+                        <p><strong>安全連線:</strong> HTTPS (已加密)</p>
+                        <p style="margin-top: 10px; color: #155724; font-size: 0.9em;">
+                            ✓ 全球內容分發網路運作中<br>
+                            ✓ 跨域資源共享已配置<br>
+                            ✓ 靜態資源載入正常
+                        </p>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status error">❌ 系統檢測異常</div>
+                    <p><strong>錯誤訊息:</strong> ${error.message}</p>
+                    <p><strong>可能原因:</strong></p>
+                    <ul>
+                        <li>網路連線中斷</li>
+                        <li>CDN 服務維護中</li>
+                        <li>資源路徑配置錯誤</li>
+                    </ul>
+                `;
+            }
+        }
+        
+        // 頁面載入後執行測試
+        window.addEventListener('load', () => {
+            setTimeout(testFetch, 1000);
+        });
+    </script>
+</body>
+</html>

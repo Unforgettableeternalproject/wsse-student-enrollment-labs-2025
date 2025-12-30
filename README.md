@@ -8,62 +8,100 @@ WSSE Student Enrollment System is a full-stack server application developed as a
 
 ## Features
 
-* **OpenAPI Specification**: Complete API documentation using OpenAPI 3.0 for student enrollment operations.
-* **Security Implementation**: JWT-based authentication and role-based authorization for secure access.
-* **Student Management**: CRUD operations for student records, including enrollment and course registration.
-* **Authorization Levels**: Different access levels for students, instructors, and administrators.
-* **API Documentation**: Interactive API documentation accessible via Swagger UI.
-* **Logging and Monitoring**: Comprehensive logging for API requests and system activities.
-* **Database Integration**: Persistent storage for student data, courses, and enrollment records.
-* **Error Handling**: Robust error handling and validation for API endpoints.
+* **OpenAPI Specification**: Complete API documentation using OpenAPI 3.0 for student enrollment operations
+* **Authentication & Authorization**: AWS Cognito integration with OAuth2 for secure user management
+* **Serverless Architecture**: AWS Lambda functions for scalable API endpoints
+* **NoSQL Database**: DynamoDB for high-performance student data persistence
+* **Event-Driven Processing**: SNS & SQS integration for asynchronous workflows
+* **Infrastructure as Code**: AWS CDK for automated infrastructure deployment
+* **Observability**: CloudWatch Logs, Metrics, Alarms, Dashboard & X-Ray distributed tracing
+* **CDN & Static Hosting**: CloudFront + S3 for global content delivery
+* **CI/CD Pipeline**: GitHub Actions with OIDC authentication for automated deployments
+* **API Documentation**: Interactive Swagger UI for API exploration and testing
 
 ## Screenshots
 
-**Currently no screenshots available.**
+Screenshots for each lab implementation are available in the `images/` directory:
+- Lab 01: OpenAPI Specification (`images/lab01/`)
+- Lab 02: Cognito Authentication (`images/lab02/`)
+- Lab 03-05: Lambda, DynamoDB, SNS/SQS Integration
+- Lab 06: CDK Infrastructure (`images/lab06/`)
+- Lab 07: CloudWatch Observability (`images/lab07/`)
+- Lab 08: CloudFront Frontend Hosting (`images/lab08/`)
 
-## Installation
+## Architecture
+
+This project implements a modern serverless architecture on AWS:
+
+```
+User → CloudFront → API Gateway → Lambda (Producer) → DynamoDB
+                                      ↓
+                                    SNS Topic
+                                      ↓
+                                   SQS Queue
+                                      ↓
+                              Lambda (Consumer)
+```
+
+**Key Components**:
+- **Frontend**: S3 + CloudFront for static website hosting
+- **API Layer**: API Gateway + Lambda functions (Node.js 18.x)
+- **Data Storage**: DynamoDB (Students table)
+- **Event Processing**: SNS/SQS for asynchronous student enrollment events
+- **Monitoring**: CloudWatch + X-Ray for observability
+- **Infrastructure**: AWS CDK (TypeScript) for IaC
+
+## Deployment
+
+### Prerequisites
+- AWS Account with appropriate permissions
+- AWS CLI configured
+- Node.js 18.x or later
+- AWS CDK CLI (`npm install -g aws-cdk`)
+
+### Deploy via CDK
 
 1. **Clone the repository**:
-
    ```bash
    git clone https://github.com/unforgettableeternalproject/wsse-student-enrollment-labs-2025
    cd wsse-student-enrollment-labs-2025
    ```
 
-2. **Install dependencies**:
+2. **Install CDK dependencies**:
+   ```bash
+   npm install
+   ```
 
-   * For Node.js backend:
-     ```bash
-     npm install
-     ```
-   * For Java backend (if applicable):
-     ```bash
-     mvn install
-     ```
+3. **Deploy infrastructure**:
+   API Endpoints
 
-3. **Set up the database**:
+### Student Management
 
-   * Configure your database connection in `config/database.js` or equivalent.
-   * Run database migrations:
-     ```bash
-     npm run migrate
-     ```
+```
+GET    /students           - List all students
+POST   /students           - Create new student
+GET    /students/{id}      - Get student by ID
+PUT    /students/{id}      - Update student
+DELETE /students/{id}      - Delete student
+```
 
-4. **Configure environment variables**:
+### System Endpoints
 
-   * Copy `.env.example` to `.env` and fill in your configuration:
-     - JWT_SECRET
-     - DATABASE_URL
-     - API_PORT
+```
+GET    /health            - Health check (no auth required)
+```
 
-5. **Run the application**:
+### Authentication
 
-   * Start the server:
-     ```bash
-     npm start
-     ```
-   * Access the API at `http://localhost:3000`
-   * View API documentation at `http://localhost:3000/api-docs`
+Authentication is handled via AWS Cognito:
+1. Obtain access token from Cognito User Pool
+2. Include token in `Authorization` header: `Bearer <token>`
+3. Tokens are validated by API Gateway authorizer
+
+For detailed API documentation, see `openapi/openapi.yaml` or visit the Swagger UI
+- Push to `main` branch triggers automatic deployment
+- Uses OIDC for secure AWS authentication
+- Automatically deploys CDK stack changes
 
 ## Usage
 
@@ -79,16 +117,54 @@ WSSE Student Enrollment System is a full-stack server application developed as a
 
 Access the interactive API documentation at `/api-docs` to explore all available endpoints, test requests, and view response schemas.
 
-## Lab Progression
+## Project Structure
 
-This project will evolve throughout the course with new features added in each lab session:
+```
+wsse-student-enrollment-labs-2025/
+├── openapi/
+│   └── openapi.yaml                 # OpenAPI 3.0 specification
+├── lambda-producer/
+│   └── index.mjs                    # Producer Lambda (API handler)
+├── lambda-consumer/
+│   └── index.mjs                    # Consumer Lambda (Event processor)
+├── lib/
+│   └── wsse-stack.ts                # CDK Stack definition
+├── bin/
+│   └── wsse-cdk.ts                  # CDK app entry point
+├── frontend/
+│   ├── index.html                   # Static website
+│   └── image.jpg                    # Demo image
+├── .github/
+│   └── workflows/
+│       ├── openapi-validation.yml   # OpenAPI spec validation
+│       └── cdk-deploy.yml           # CDK deployment workflow
+├── submissions/                      # Lab submission documents
+│   ├── lab01-submission.md
+│   ├── lab02-submission.md
+│   ├── lab06-submission.md
+│   ├── lab07-submission.md
+│   └── lab08-submission.md
+└── images/                          # Lab screenshots
+    ├── lab01/, lab02/, lab03/
+    ├── lab06/, lab07/, lab08/
+    └── ...
+```
 
-- **Lab 1**: Basic OpenAPI specification
-- **Lab 2**: To be discovered
-- **Lab 3**: To be discovered
-- **Lab 4**: To be discovered
-- **Lab 5**: To be discovered
-- **Lab 6**: To be discovered
+## Monitoring & Observability
+
+The system includes comprehensive observability features:
+
+- **CloudWatch Logs**: 7-day retention for Lambda execution logs
+- **CloudWatch Metrics**: Custom metrics for API calls, errors, latency
+- **CloudWatch Alarms**: 4 alarms monitoring system health
+  - Producer Lambda errors (≥3 in 5 min)
+  - Producer Lambda duration (>5000ms)
+  - Consumer Lambda errors (≥3 in 5 min)
+  - DynamoDB throttling (≥5 in 5 min)
+- **CloudWatch Dashboard**: Real-time visualization of system metrics
+- **X-Ray Tracing**: Distributed tracing for request flowsdeployment automation
+- **Lab 7** ✅: Observability - CloudWatch Logs, Metrics, Alarms, Dashboard & X-Ray tracing
+- **Lab 8** ✅: Frontend Hosting - CloudFront CDN + S3 static website hosting
 
 ## To-Do List
 
